@@ -1,0 +1,25 @@
+# Node modules
+/node_modules
+
+# Angular cache
+.angular/
+
+# Temporary files
+/tmp
+/dist
+/out-tsc
+
+# IDEs and editors
+.idea/
+.vscode/
+*.sublime-workspace
+*.log
+.history
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Coverage and build reports
+/coverage
+/bazel-out
