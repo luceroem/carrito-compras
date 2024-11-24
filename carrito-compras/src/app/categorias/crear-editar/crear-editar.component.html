@@ -1,0 +1,26 @@
+<div class="contenedor">
+  <h2>{{ esEdicion ? 'Editar Categoría' : 'Crear Categoría' }}</h2>
+  <form (ngSubmit)="guardarCategoria()" class="formulario">
+    <label for="nombre">Nombre:</label>
+    <input
+      id="nombre"
+      [(ngModel)]="categoria.nombre"
+      name="nombre"
+      placeholder="Ingrese el nombre"
+      required
+      class="input-text"
+    />
+    <div class="botones">
+      <button type="submit" class="boton guardar">
+        {{ esEdicion ? 'Guardar Cambios' : 'Crear Categoría' }}
+      </button>
+      <button
+        type="button"
+        [routerLink]="['/categorias']"
+        class="boton cancelar"
+      >
+        Cancelar
+      </button>
+    </div>
+  </form>
+</div>

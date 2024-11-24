@@ -1,0 +1,42 @@
+<div class="contenedor">
+  <h2>Listado de Categorías</h2>
+  <input
+    [(ngModel)]="filtroNombre"
+    placeholder="Buscar por nombre"
+    class="input-busqueda"
+  />
+
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let categoria of filtrarCategorias()">
+        <td>{{ categoria.idCategoria }}</td>
+        <td>{{ categoria.nombre }}</td>
+        <td>
+          <button
+            [routerLink]="['/categorias/editar', categoria.idCategoria]"
+            class="boton"
+          >
+            Editar
+          </button>
+          <button
+            (click)="eliminarCategoria(categoria.idCategoria)"
+            class="boton eliminar"
+          >
+            Eliminar
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <button [routerLink]="['/categorias/crear']" class="boton crear">
+    Crear Nueva Categoría
+  </button>
+</div>
