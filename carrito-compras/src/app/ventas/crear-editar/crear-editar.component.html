@@ -1,9 +1,8 @@
-<div class="venta-container">
-  <h2>{{ isEdit ? 'Editar Venta' : 'Nueva Venta' }}</h2>
-
+<div class="contenedor">
   <!-- Solo mostrar búsqueda de productos en modo creación -->
   <div *ngIf="!isEdit">
     <div class="busqueda-section">
+      <h2>{{ isEdit ? 'Editar Venta' : 'Nueva Venta' }}</h2>
       <h3>Buscar Productos</h3>
       <div class="search-controls">
         <input type="text" [(ngModel)]="busqueda" (input)="buscarProductos()" placeholder="Buscar por nombre...">
@@ -14,7 +13,7 @@
           </option>
         </select>
       </div>
-
+      
       <div class="productos-lista">
         <div *ngFor="let producto of productos" class="producto-item">
           <span>{{producto.nombre}} - ${{producto.precioVenta}}</span>
@@ -37,7 +36,6 @@
         <strong>Total: ${{ventaService.calcularTotal()}}</strong>
       </div>
 
-      <!-- Mover el formulario de cliente dentro del carrito cuando hay items -->
       <div class="cliente-form" *ngIf="getCarritoItems().length > 0">
         <h3>Datos del Cliente</h3>
         <div *ngIf="!cliente">
@@ -59,7 +57,6 @@
     </div>
   </div>
 
-  <!-- Mostrar detalles en modo edición -->
   <div *ngIf="isEdit" class="detalles-venta">
     <h3>Detalles de la Venta</h3>
     <div *ngFor="let detalle of venta.detalles">
