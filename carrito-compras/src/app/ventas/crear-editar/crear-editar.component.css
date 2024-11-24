@@ -1,0 +1,117 @@
+.crear-editar-container {
+  padding: 20px;
+}
+
+.cliente-info label,
+.producto-busqueda input {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.carrito ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.carrito li {
+  padding: 5px;
+}
+
+.venta-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  padding: 20px;
+}
+
+.busqueda-section {
+  grid-column: 1;
+}
+
+.carrito-section {
+  grid-column: 2;
+  position: sticky;
+  top: 20px;
+}
+
+.search-controls {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.search-controls input,
+.search-controls select {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.busqueda-productos {
+  grid-column: 1 / -1;
+}
+
+.productos-lista {
+  border: 1px solid #ddd;
+  padding: 10px;
+}
+
+.carrito {
+  border: 1px solid #ddd;
+  padding: 10px;
+}
+
+.carrito-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.btn-eliminar {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.btn-eliminar:hover {
+  background-color: #c82333;
+}
+
+.cliente-form {
+  grid-column: 1 / -1;
+  padding: 20px;
+  border: 1px solid #ddd;
+}
+
+.producto-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+input[type="number"] {
+  width: 60px;
+}
+
+.boton{
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  margin: 0 5px;
+}
+
+button:hover {
+  background-color: #0056b3;
+}

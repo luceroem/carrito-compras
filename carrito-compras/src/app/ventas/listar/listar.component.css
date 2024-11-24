@@ -1,0 +1,87 @@
+.listar-container {
+  padding: 20px;
+}
+
+.ventas-lista {
+  list-style-type: none;
+  padding: 0;
+}
+
+.ventas-lista li {
+  margin-bottom: 10px;
+}
+
+.venta-detalles {
+  margin-top: 20px;
+}
+
+.contenedor {
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+  padding: 25px;
+  margin: 20px auto;
+  max-width: 1000px;
+}
+
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 20px 0;
+}
+
+th,
+td {
+  padding: 16px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+th {
+  background-color: #f8f9fa;
+  color: #2c3e50;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 14px;
+  letter-spacing: 1px;
+}
+
+tr:hover {
+  background-color: #f8f9fa;
+}
+
+.boton{
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    margin: 0 5px;
+}
+
+.eliminar {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+  color: white;
+}
+
+.crear {
+  background: linear-gradient(135deg, #3498db, #2980b9);
+  color: white;
+  padding: 12px 25px;
+  font-size: 16px;
+}
+
+
+.boton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  color: #2c3e50;
+  font-size: 28px;
+  margin-bottom: 30px;
+  font-weight: 600;
+}

@@ -1,0 +1,32 @@
+<div class="contenedor">
+  <h2>Listado de Ventas</h2>
+  <button (click)="crearNuevaVenta()" class="boton">Nueva Venta</button>
+
+  <div *ngIf="ventas.length === 0" class="no-data">
+    No hay ventas registradas
+  </div>
+
+  <table *ngIf="ventas.length > 0">
+    <thead>
+      <tr>
+        <th>ID Venta</th>
+        <th>Fecha</th>
+        <th>Cliente</th>
+        <th>Total</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let venta of ventas">
+        <td>{{ venta.idVenta }}</td>
+        <td>{{ venta.fecha | date:'dd/MM/yyyy HH:mm' }}</td>
+        <td>{{ venta.idCliente }}</td>
+        <td>${{ venta.total.toFixed(2) }}</td>
+        <td>
+          <button (click)="editarVenta(venta)" class="boton">Editar</button>
+          <button (click)="eliminarVenta(venta.idVenta)" class="boton eliminar">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

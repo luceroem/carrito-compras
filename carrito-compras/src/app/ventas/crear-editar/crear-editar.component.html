@@ -1,0 +1,72 @@
+<div class="venta-container">
+  <h2>{{ isEdit ? 'Editar Venta' : 'Nueva Venta' }}</h2>
+
+  <!-- Solo mostrar búsqueda de productos en modo creación -->
+  <div *ngIf="!isEdit">
+    <div class="busqueda-section">
+      <h3>Buscar Productos</h3>
+      <div class="search-controls">
+        <input type="text" [(ngModel)]="busqueda" (input)="buscarProductos()" placeholder="Buscar por nombre...">
+        <select [(ngModel)]="categoriaSeleccionada" (change)="buscarProductos()">
+          <option value="0">Todas las categorías</option>
+          <option *ngFor="let cat of categorias" [value]="cat.idCategoria">
+            {{cat.nombre}}
+          </option>
+        </select>
+      </div>
+
+      <div class="productos-lista">
+        <div *ngFor="let producto of productos" class="producto-item">
+          <span>{{producto.nombre}} - ${{producto.precioVenta}}</span>
+          <input type="number" [(ngModel)]="cantidad" min="1">
+          <button (click)="agregarAlCarrito(producto)" class="boton">Agregar</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="carrito-section">
+      <h3>Carrito de Compras</h3>
+      <div *ngFor="let item of getCarritoItems()" class="carrito-item">
+        <span>{{getProductoNombre(item.idProducto)}}</span>
+        <input type="number" [ngModel]="item.cantidad" 
+               (ngModelChange)="actualizarProductoCarrito(item.idProducto, $event)" min="1">
+        <span>${{item.precio * item.cantidad}}</span>
+        <button class="btn-eliminar" (click)="eliminarDelCarrito(item.idProducto)">X</button>
+      </div>
+      <div class="total">
+        <strong>Total: ${{ventaService.calcularTotal()}}</strong>
+      </div>
+
+      <!-- Mover el formulario de cliente dentro del carrito cuando hay items -->
+      <div class="cliente-form" *ngIf="getCarritoItems().length > 0">
+        <h3>Datos del Cliente</h3>
+        <div *ngIf="!cliente">
+          <input type="text" [(ngModel)]="cedula" placeholder="Cédula">
+          <button (click)="buscarCliente()">Buscar Cliente</button>
+        
+          <div class="nuevo-cliente-form">
+            <input type="text" [(ngModel)]="nombre" placeholder="Nombre">
+            <input type="text" [(ngModel)]="apellido" placeholder="Apellido">
+            <button (click)="registrarCliente()">Registrar Cliente</button>
+          </div>
+        </div>
+
+        <div *ngIf="cliente">
+          <p>Cliente: {{cliente.nombre}} {{cliente.apellido}}</p>
+          <button (click)="guardarVenta()">{{ isEdit ? 'Actualizar Venta' : 'Finalizar Venta' }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mostrar detalles en modo edición -->
+  <div *ngIf="isEdit" class="detalles-venta">
+    <h3>Detalles de la Venta</h3>
+    <div *ngFor="let detalle of venta.detalles">
+      <span>Producto {{detalle.idProducto}} - Cantidad: {{detalle.cantidad}} - ${{detalle.precio}}</span>
+    </div>
+    <div class="total">
+      <strong>Total: ${{venta.total}}</strong>
+    </div>
+  </div>
+</div>
