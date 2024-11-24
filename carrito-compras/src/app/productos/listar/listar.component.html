@@ -1,0 +1,54 @@
+<div class="contenedor">
+  <h2>Listado de Productos</h2>
+  <div class="filtros">
+    <input
+      [(ngModel)]="filtroNombre"
+      placeholder="Buscar por nombre"
+      class="input-busqueda"
+    />
+    <select [(ngModel)]="filtroCategoria" class="input-select">
+      <option [value]="null">Todas las categorías</option>
+      <option *ngFor="let categoria of categorias" [value]="categoria.idCategoria">
+        {{ categoria.nombre }}
+      </option>
+    </select>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Categoría</th>
+        <th>Precio</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let producto of filtrarProductos()">
+        <td>{{ producto.idProducto }}</td>
+        <td>{{ producto.nombre }}</td>
+        <td>{{ obtenerCategoriaNombre(producto.idCategoria) }}</td>
+        <td>{{ producto.precioVenta | currency }}</td>
+        <td>
+          <button
+            [routerLink]="['/productos/editar', producto.idProducto]"
+            class="boton"
+          >
+            Editar
+          </button>
+          <button
+            (click)="eliminarProducto(producto.idProducto)"
+            class="boton eliminar"
+          >
+            Eliminar
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <button [routerLink]="['/productos/crear']" class="boton crear">
+    Crear Nuevo Producto
+  </button>
+</div>

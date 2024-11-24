@@ -1,0 +1,60 @@
+<div class="contenedor">
+  <h2>{{ esEdicion ? 'Editar Producto' : 'Crear Producto' }}</h2>
+  <form #productoForm="ngForm" (ngSubmit)="guardarProducto()" class="formulario">
+    <label for="nombre">Nombre:</label>
+    <input
+      id="nombre"
+      [(ngModel)]="producto.nombre"
+      name="nombre"
+      placeholder="Ingrese el nombre"
+      required
+      class="input-text"
+    />
+
+    <label for="categoria">Categoría:</label>
+    <select
+      id="categoria"
+      [(ngModel)]="producto.idCategoria"
+      name="categoria"
+      required
+      class="input-text"
+      #categoria="ngModel"
+    >
+      <option [ngValue]="0">Seleccione una categoría</option>
+      <option *ngFor="let categoria of categorias" [ngValue]="categoria.idCategoria">
+        {{ categoria.nombre }}
+      </option>
+    </select>
+    <div *ngIf="categoria.invalid && (categoria.dirty || categoria.touched)" class="alert alert-danger">
+      Debe seleccionar una categoría
+    </div>
+
+    <label for="precioVenta">Precio de Venta:</label>
+    <input
+      id="precioVenta"
+      type="number"
+      [(ngModel)]="producto.precioVenta"
+      name="precioVenta"
+      placeholder="Ingrese el precio de venta"
+      required
+      class="input-text"
+    />
+
+    <div class="botones">
+      <button 
+        type="submit" 
+        class="boton guardar" 
+        [disabled]="productoForm.invalid || productoForm.pristine"
+      >
+        {{ esEdicion ? 'Guardar Cambios' : 'Crear Producto' }}
+      </button>
+      <button
+        type="button"
+        [routerLink]="['/productos']"
+        class="boton cancelar"
+      >
+        Cancelar
+      </button>
+    </div>
+  </form>
+</div>
