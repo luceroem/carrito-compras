@@ -1,3 +1,5 @@
+import { Cliente } from '../../clientes/models/cliente.model';
+
 export interface Venta {
   idVenta: number;
   fecha: Date;
@@ -11,5 +13,6 @@ export interface DetalleVenta {
   idDetalleVenta: number;
   idProducto: number;
   cantidad: number;
-  precio: number;
+  precioVenta: number;
+  nombreProducto?: string;
 }

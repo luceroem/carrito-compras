@@ -2,58 +2,40 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { Venta, DetalleVenta } from './models/venta.model';
 import { Producto } from '../productos/models/producto.model';
+import { Cliente } from '../clientes/models/cliente.model';
+import { ClienteService } from '../clientes/cliente.service'; 
+import { ProductoService } from '../productos/producto.service';  // Inyecta ProductoService
+import { map } from 'rxjs/operators';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class VentaService {
-  private ventas: Venta[] = [
-    {
-      idVenta: 1,
-      fecha: new Date(),
-      idCliente: 1,
-      total: 150.00,
-      detalles: [
-        {
-          idVenta: 1,
-          idDetalleVenta: 1,
-          idProducto: 1,
-          cantidad: 2,
-          precio: 75.00
-        }
-      ]
-    },
-    {
-      idVenta: 2,
-      fecha: new Date(),
-      idCliente: 2,
-      total: 200.00,
-      detalles: [
-        {
-          idVenta: 2,
-          idDetalleVenta: 1,
-          idProducto: 2,
-          cantidad: 1,
-          precio: 200.00
-        }
-      ]
-    }
-  ];
-  private carrito: DetalleVenta[] = []; // Agregar esta línea
+  private ventas: Venta[] = [];
+  private carrito: DetalleVenta[] = [];
+  private clientes: Cliente[] = [];
 
-  // Obtener todas las ventas
+  constructor(private clienteService: ClienteService, private productoService: ProductoService) {
+    this.cargarClientes();
+  }
+
+  // Método para cargar los clientes desde el servicio ClienteService
+  cargarClientes(): void {
+    this.clienteService.getClientes().subscribe(clientes => {
+      this.clientes = clientes;
+    });
+  }
+
   getVentas(): Observable<Venta[]> {
     return of(this.ventas);
   }
 
-  // Finalizar venta (crear o actualizar)
   finalizarVenta(venta: Venta): Observable<Venta> {
     if (venta.idVenta === 0) {
-      // Crear nueva venta
       venta.idVenta = this.ventas.length + 1;
       this.ventas.push(venta);
     } else {
-      // Actualizar venta existente
       const index = this.ventas.findIndex(v => v.idVenta === venta.idVenta);
       if (index !== -1) {
         this.ventas[index] = venta;
@@ -62,7 +44,6 @@ export class VentaService {
     return of(venta);
   }
 
-  // Eliminar venta
   eliminarVenta(idVenta: number): Observable<void> {
     const index = this.ventas.findIndex(v => v.idVenta === idVenta);
     if (index !== -1) {
@@ -71,25 +52,21 @@ export class VentaService {
     return of();
   }
 
-  // Métodos para el carrito
   agregarAlCarrito(producto: Producto, cantidad: number): void {
     const detalleExistente = this.carrito.find(item => item.idProducto === producto.idProducto);
-    
     if (detalleExistente) {
       detalleExistente.cantidad += cantidad;
     } else {
-      const detalle: DetalleVenta = {
+      this.carrito.push({
         idVenta: 0,
         idDetalleVenta: this.carrito.length + 1,
         idProducto: producto.idProducto,
         cantidad: cantidad,
-        precio: producto.precioVenta // Usar precioVenta en lugar de precio
-      };
-      this.carrito.push(detalle);
+        precioVenta: producto.precioVenta
+      });
     }
   }
 
-  // Eliminar del carrito
   eliminarDelCarrito(idProducto: number): void {
     const index = this.carrito.findIndex(item => item.idProducto === idProducto);
     if (index !== -1) {
@@ -106,6 +83,25 @@ export class VentaService {
   }
 
   calcularTotal(): number {
-    return this.carrito.reduce((total, item) => total + (item.precio * item.cantidad), 0);
+    return this.carrito.reduce((total, item) => total + item.precioVenta * item.cantidad, 0);
   }
+
+  // Método para obtener un cliente por idCliente
+  getCliente(idCliente: number): Cliente | undefined {
+    return this.clientes.find(cliente => cliente.idCliente === idCliente);
+  }
+
+  // Servicio VentaService
+    getClientes(): Cliente[] {
+        return this.clientes; // Devuelve todos los clientes
+    }
+
+    // Método para obtener un producto por idProducto
+    getProducto(idProducto: number): Observable<Producto | undefined> {
+        return this.productoService.obtenerProductos().pipe(
+            map(productos => productos.find(producto => producto.idProducto === idProducto))
+        );
+    }
+      
+  
 }

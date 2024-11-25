@@ -4,9 +4,9 @@ import { ListarVentasComponent } from './listar/listar.component';
 import { CrearEditarVentaComponent } from './crear-editar/crear-editar.component';
 
 const routes: Routes = [
-    { path: '', component: ListarVentasComponent },
-    { path: 'crear', component: CrearEditarVentaComponent },
-    { path: 'editar/:id', component: CrearEditarVentaComponent }
+  { path: '', component: ListarVentasComponent }, // Página principal de "ventas"
+  { path: 'crear', component: CrearEditarVentaComponent },
+  { path: 'editar/:id', component: CrearEditarVentaComponent }
 ];
 
 @NgModule({

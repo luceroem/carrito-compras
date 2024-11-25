@@ -1,4 +1,3 @@
-// crear-editar.component.ts
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { VentaService } from '../venta.service';
@@ -16,196 +15,243 @@ import { Categoria } from '../../categorias/models/categoria.model';
   styleUrls: ['./crear-editar.component.css']
 })
 export class CrearEditarVentaComponent implements OnInit {
-  productos: Producto[] = [];
-  busqueda: string = '';
-  categoriaSeleccionada: number = 0;
-  cantidad: number = 1;
-  cliente: Cliente | null = null;
-  cedula: string = '';
-  nombre: string = '';
-  apellido: string = '';
-  isEdit: boolean = false;
-  venta: Venta = {
-    idVenta: 0,
-    fecha: new Date(),
-    idCliente: 0,
-    total: 0,
-    detalles: []
-  };
-  categorias: Categoria[] = [];
-  productosEnCarrito: { producto: Producto, cantidad: number }[] = [];
-  mensajeError: string = '';
-  mensajeExito: string = '';
+    productos: Producto[] = [];
+    busqueda: string = '';
+    categoriaSeleccionada: number = 0;
+    cantidad: number = 1;
+    clienteRegistrado: Cliente | null = null;
+    cedulaCliente: string = '';
+    nombreCliente: string = '';
+    apellidoCliente: string = '';
+    isEdit: boolean = false;
+    venta: Venta = { idVenta: 0, fecha: new Date(), idCliente: 0, total: 0, detalles: [] };
+    categorias: Categoria[] = [];
+    mensajeExito: string = ''; 
+    mensajeError: string = '';
+    mostrarModal: boolean = false;
+    mostrarModalCliente: boolean = false;
+    productoSeleccionado: Producto | null = null;
+    filtroNombre: string = ''; // Para almacenar el texto de búsqueda
+    filtroCategoria: number | null = null; // Para almacenar la categoría seleccionada
+    
 
-  constructor(
-    private router: Router,
-    private route: ActivatedRoute,
-    public ventaService: VentaService, // Change to public
-    private clienteService: ClienteService,
-    private productoService: ProductoService,
-    private categoriaService: CategoriaService
-  ) {}
+    constructor(
+        private router: Router,
+        private route: ActivatedRoute,
+        public ventaService: VentaService,
+        private clienteService: ClienteService,
+        private productoService: ProductoService,
+        private categoriaService: CategoriaService
+    ) {}
 
-  ngOnInit(): void {
-    this.cargarCategorias();
-    const idVenta = this.route.snapshot.paramMap.get('id');
-    if (idVenta) {
-      this.isEdit = true;
-      this.ventaService.getVentas().subscribe((ventas: Venta[]) => {
-        const ventaEncontrada = ventas.find(v => v.idVenta === +idVenta);
-        if (ventaEncontrada) {
-          this.venta = ventaEncontrada;
-          this.cargarDatosVenta(ventaEncontrada);
-        } else {
-          this.router.navigate(['/ventas']);
+
+    ngOnInit(): void {
+        this.cargarCategorias();
+        const idVenta = this.route.snapshot.paramMap.get('id');
+        if (idVenta) {
+        this.isEdit = true;
+        this.ventaService.getVentas().subscribe((ventas: Venta[]) => {
+            const ventaEncontrada = ventas.find(v => v.idVenta === +idVenta);
+            if (ventaEncontrada) {
+            this.venta = ventaEncontrada;
+            this.cargarDatosVenta(ventaEncontrada);
+            } else {
+            this.router.navigate(['/ventas']);
+            }
+        });
         }
-      });
+        this.buscarProductos();
     }
-    this.buscarProductos();
-  }
 
-  cargarCategorias(): void {
-    this.categoriaService.obtenerCategorias().subscribe((categorias: Categoria[]) => {
-      this.categorias = categorias;
-    });
-  }
-
-  buscarProductos(): void {
-    this.productoService.obtenerProductos().subscribe((productos: Producto[]) => {
-      this.productos = productos.filter(p => 
-        p.nombre.toLowerCase().includes(this.busqueda.toLowerCase()) &&
-        (this.categoriaSeleccionada === 0 || p.idCategoria === this.categoriaSeleccionada)
-      );
-    });
-  }
-
-  agregarAlCarrito(producto: Producto): void {
-    this.ventaService.agregarAlCarrito(producto, this.cantidad);
-    this.cantidad = 1;
-  }
-
-  actualizarProductoCarrito(idProducto: number, nuevaCantidad: number): void {
-    const detalle = this.ventaService.getCarrito().find(d => d.idProducto === idProducto);
-    if (detalle) {
-      detalle.cantidad = nuevaCantidad;
+    cargarCategorias(): void {
+        this.categoriaService.obtenerCategorias().subscribe((categorias: Categoria[]) => {
+        this.categorias = categorias;
+        });
     }
-  }
+
+    buscarProductos(): void {
+        this.productoService.obtenerProductos().subscribe((productos: Producto[]) => {
+            this.productos = productos.filter(p => 
+                p.nombre.toLowerCase().includes(this.filtroNombre.toLowerCase()) &&
+                (this.filtroCategoria === null || p.idCategoria === this.filtroCategoria)
+            );
+        });
+    }
+    
+
+    abrirModal(producto: Producto): void {
+        this.productoSeleccionado = producto;
+        this.cantidad = 1; // Valor por defecto
+        this.mostrarModal = true;
+    }
+
+    cerrarModal(): void {
+        this.productoSeleccionado = null;
+        this.mostrarModal = false;
+    }
+
+    // Método para abrir el modal al hacer clic en "Finalizar Orden"
+    abrirModalFinalizarOrden(): void {
+        this.mostrarModalCliente = true; // Muestra el modal de cliente
+    }
+
+    // Método para cerrar el modal
+    cerrarModalCliente(): void {
+        this.mostrarModalCliente = false; // Cierra el modal de cliente
+    }
+
+    agregarDetalleVenta(): void {
+        if (this.productoSeleccionado && this.cantidad > 0) {
+        this.ventaService.agregarAlCarrito(this.productoSeleccionado, this.cantidad);
+        this.cerrarModal(); // Cierra el modal tras agregar
+        }
+    }
+
+    actualizarProductoCarrito(idProducto: number, nuevaCantidad: number): void {
+        const detalle = this.ventaService.getCarrito().find(d => d.idProducto === idProducto);
+        if (detalle) {
+        detalle.cantidad = nuevaCantidad;
+        }
+    }  
 
   eliminarDelCarrito(idProducto: number): void {
     this.ventaService.eliminarDelCarrito(idProducto);
   }
 
-  buscarCliente(): void {
-    if (!this.cedula.trim()) {
-      this.mensajeError = 'Ingrese una cédula válida';
-      return;
-    }
-
-    this.clienteService.buscarPorCedula(this.cedula).subscribe(
-      (cliente: Cliente | null) => {
-        if (cliente) {
-          this.cliente = cliente;
-          this.nombre = cliente.nombre;
-          this.apellido = cliente.apellido;
-          this.mensajeError = '';
-        } else {
-          this.mensajeError = 'Cliente no encontrado';
+    buscarCliente(): void {
+        if (!this.cedulaCliente.trim()) {
+        this.mensajeError = 'Ingrese una cédula válida';
+        return;
         }
-      },
-      error => {
-        this.mensajeError = 'Error al buscar cliente';
-      }
-    );
-  }
-
-  registrarCliente(): void {
-    if (!this.cedula.trim() || !this.nombre.trim() || !this.apellido.trim()) {
-      this.mensajeError = 'Todos los campos son requeridos';
-      return;
-    }
-
-    const nuevoCliente: Cliente = {
-      idCliente: 0,
-      cedula: this.cedula,
-      nombre: this.nombre,
-      apellido: this.apellido
-    };
-
-    this.clienteService.registrarCliente(nuevoCliente).subscribe(
-      (cliente: Cliente) => {
-        this.cliente = cliente;
-        this.mensajeExito = 'Cliente registrado exitosamente';
-        this.mensajeError = '';
-      },
-      error => {
-        this.mensajeError = 'Error al registrar cliente';
-      }
-    );
-  }
-
-  guardarVenta(): void {
-    if (!this.cliente) {
-      this.mensajeError = 'Debe seleccionar un cliente';
-      return;
-    }
-
-    if (this.ventaService.getCarrito().length === 0 && !this.isEdit) {
-      this.mensajeError = 'El carrito está vacío';
-      return;
-    }
-
-    this.venta.idCliente = this.cliente.idCliente;
-    this.venta.total = this.ventaService.calcularTotal();
     
-    if (!this.isEdit) {
-      this.venta.detalles = this.ventaService.getCarrito();
+        this.clienteService.buscarPorCedula(this.cedulaCliente).subscribe(
+        (cliente: Cliente | null) => {
+            if (cliente) {
+            this.clienteRegistrado = cliente;
+            this.nombreCliente = cliente.nombre;
+            this.apellidoCliente = cliente.apellido;
+            this.mensajeError = '';
+            } else {
+            this.mensajeError = 'Cliente no encontrado';
+            }
+        },
+        error => {
+            this.mensajeError = 'Error al buscar cliente';
+        }
+        );
+    }
+    
+
+  // Método para registrar un cliente si no existe
+    registrarCliente(): void {
+        if (!this.cedulaCliente.trim() || !this.nombreCliente.trim() || !this.apellidoCliente.trim()) {
+        this.mensajeError = 'Todos los campos son requeridos';
+        return;
+        }
+
+        // Verificar si el cliente ya existe
+        this.clienteService.buscarPorCedula(this.cedulaCliente).subscribe(
+        (cliente: Cliente | null) => {
+            if (cliente) {
+            this.clienteRegistrado = cliente;
+            this.mensajeExito = 'Cliente encontrado';
+            this.mensajeError = '';
+            this.finalizarOrden(cliente); // Finalizar la venta con el cliente existente
+            this.cerrarModalCliente(); // Cierra el modal
+            } else {
+            // Registrar nuevo cliente
+            const nuevoCliente: Cliente = {
+                idCliente: 0, // El ID será asignado por el backend
+                cedula: this.cedulaCliente,
+                nombre: this.nombreCliente,
+                apellido: this.apellidoCliente
+            };
+
+            this.clienteService.registrarCliente(nuevoCliente).subscribe(
+                (cliente: Cliente) => {
+                this.clienteRegistrado = cliente;
+                this.mensajeExito = 'Cliente registrado exitosamente';
+                this.mensajeError = '';
+                this.finalizarOrden(cliente); // Finalizar la venta con el cliente registrado
+                this.cerrarModalCliente(); // Cierra el modal
+                },
+                error => {
+                this.mensajeError = 'Error al registrar cliente';
+                }
+            );
+            }
+        },
+        error => {
+            this.mensajeError = 'Error al buscar cliente';
+        }
+        );
+    }
+  
+    // Método para finalizar la venta y guardar la orden
+    finalizarOrden(cliente: Cliente): void {
+        if (!this.isEdit && this.ventaService.getCarrito().length === 0) {
+        this.mensajeError = 'El carrito está vacío';
+        return;
+        }
+
+        this.venta.idCliente = cliente.idCliente;
+        this.venta.total = this.ventaService.calcularTotal();
+
+        this.venta.detalles = this.ventaService.getCarrito().map((item, index) => ({
+        idVenta: this.venta.idVenta,
+        idDetalleVenta: index + 1,
+        idProducto: item.idProducto,
+        cantidad: item.cantidad,
+        precioVenta: item.precioVenta
+        }));
+
+        // Guardar la venta
+        this.ventaService.finalizarVenta(this.venta).subscribe(
+        () => {
+            this.ventaService.limpiarCarrito();
+            this.mensajeExito = 'Orden finalizada exitosamente';
+            this.mensajeError = '';
+            setTimeout(() => {
+            this.router.navigate(['/ventas']);
+            }, 1500);
+        },
+        error => {
+            this.mensajeError = 'Error al finalizar la orden';
+        }
+        );
     }
 
-    this.ventaService.finalizarVenta(this.venta).subscribe(
-      () => {
+    private cargarDatosVenta(venta: Venta): void {
+        this.clienteService.getClienteById(venta.idCliente).subscribe(
+        (cliente: Cliente | null) => {
+            if (cliente) {
+            this.clienteRegistrado = cliente;
+            this.cedulaCliente = cliente.cedula;
+            this.nombreCliente = cliente.nombre;
+            this.apellidoCliente = cliente.apellido;
+            }
+        }
+        );
+    
+        this.productoService.obtenerProductos().subscribe((productos: Producto[]) => {
+        this.productos = productos;
         this.ventaService.limpiarCarrito();
-        this.mensajeExito = 'Venta guardada exitosamente';
-        setTimeout(() => {
-          this.router.navigate(['/ventas']);
-        }, 1500);
-      },
-      error => {
-        this.mensajeError = 'Error al guardar la venta';
-      }
-    );
-  }
+        venta.detalles.forEach(detalle => {
+            const producto = productos.find(p => p.idProducto === detalle.idProducto);
+            if (producto) {
+            this.ventaService.agregarAlCarrito(producto, detalle.cantidad);
+            }
+        });
+        });
+    }
+  
 
-  private cargarDatosVenta(venta: Venta): void {
-    this.clienteService.getClienteById(venta.idCliente).subscribe(
-      (cliente: Cliente | null) => {
-        if (cliente) {
-          this.cliente = cliente;
-          this.cedula = cliente.cedula;
-          this.nombre = cliente.nombre;
-          this.apellido = cliente.apellido;
-        }
-      }
-    );
+    getProductoNombre(idProducto: number): string {
+        const producto = this.productos.find(p => p.idProducto === idProducto);
+        return producto ? producto.nombre : '';
+    }
 
-    this.productoService.obtenerProductos().subscribe((productos: Producto[]) => {
-      this.productos = productos;
-      this.ventaService.limpiarCarrito();
-      venta.detalles.forEach(detalle => {
-        const producto = productos.find(p => p.idProducto === detalle.idProducto);
-        if (producto) {
-          this.ventaService.agregarAlCarrito(producto, detalle.cantidad);
-        }
-      });
-    });
-  }
-
-  // Add helper methods to access product information
-  getProductoNombre(idProducto: number): string {
-    const producto = this.productos.find(p => p.idProducto === idProducto);
-    return producto ? producto.nombre : '';
-  }
-
-  getCarritoItems(): DetalleVenta[] {
-    return this.ventaService.getCarrito();
-  }
+    getCarritoItems(): DetalleVenta[] {
+        return this.ventaService.getCarrito();
+    }
 }

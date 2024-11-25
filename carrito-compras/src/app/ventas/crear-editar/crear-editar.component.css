@@ -22,6 +22,7 @@
   font-size: 16px;
 }
 
+
 .input-busqueda:focus,
 .input-select:focus {
   border-color: #3498db;
@@ -29,108 +30,172 @@
   outline: none;
 }
 
-.search-controls {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 20px 0;
 }
 
-.search-controls input,
-.search-controls select {
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+th,
+td {
+  padding: 16px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
 }
 
-.producto-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 10px;
-  border: 1px solid #ddd;
-  padding: 10px;
-  border-radius: 8px;
+th {
+  background-color: #f8f9fa;
+  color: #2c3e50;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 14px;
+  letter-spacing: 1px;
 }
 
-input[type="number"] {
-  width: 60px;
+tr:hover {
+  background-color: #f8f9fa;
 }
 
 .boton {
-  padding: 10px 20px;
+  flex: 1;
+  padding: 12px 24px;
   border: none;
   border-radius: 8px;
   cursor: pointer;
   font-weight: 500;
+  font-size: 16px;
   transition: all 0.3s ease;
-  margin: 0 5px;
 }
 
 .boton:hover {
-  background-color: #0056b3;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
-.carrito-section {
-  border: 1px solid #ddd;
-  padding: 20px;
-  border-radius: 10px;
+.boton.eliminar {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+  color: white;
 }
 
-.carrito-item {
+.boton.crear {
+  background: linear-gradient(135deg, #2ecc71, #27ae60);
+  color: white;
+}
+
+.boton.editar {
+  background: linear-gradient(135deg, #3498db, #2980b9);
+  color: white;
+}
+
+.modal-contenido h3 {
+  font-size: 24px;
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+
+
+h2 {
+  color: #2c3e50;
+  font-size: 28px;
+  margin-bottom: 30px;
+  font-weight: 600;
+}
+
+.alert {
+  padding: 15px;
+  border-radius: 8px;
+  margin: 10px 0;
+  font-size: 16px;
   display: flex;
   align-items: center;
-  gap: 10px;
+  justify-content: space-between;
+}
+
+.alert-success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.alert-danger {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.alert-success, .alert-danger, .alert-warning {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.alert-warning {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.cliente-info {
+  background-color: #e9ecef;
   padding: 10px;
-  border-bottom: 1px solid #ddd;
+  border-radius: 4px;
 }
 
-.total {
-  margin-top: 20px;
-  font-size: 18px;
-}
-
-.cliente-form {
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  margin-top: 20px;
-}
-
-.cliente-form input {
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
-  padding: 10px;
-  margin-bottom: 15px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
 }
 
-.cliente-form button {
-  width: 100%;
-  padding: 10px;
-  background-color: #3498db;
-  border: none;
-  color: white;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.cliente-form button:hover {
-  background-color: #2980b9;
-}
-
-h3 {
-  color: #2c3e50;
-  font-size: 22px;
-  margin-bottom: 15px;
-}
-
-.detalles-venta {
-  border: 1px solid #ddd;
+.modal-contenido {
+  background: #fff;
   padding: 20px;
-  border-radius: 8px;
-}
-
-.detalles-venta span {
+  border-radius: 15px; /* Usar un borde redondeado consistente */
+  text-align: left;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.1); /* Sombra más suave */
   display: block;
-  margin-bottom: 10px;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.modal-contenido input[type="text"],
+.modal-contenido input[type="number"],
+.modal-contenido select {
+  padding: 15px;
+  border: 2px solid #e1e1e1;
+  border-radius: 10px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  width: 92%;
+}
+
+.modal-contenido input[type="text"]:focus,
+.modal-contenido input[type="number"]:focus,
+.modal-contenido select:focus {
+  border-color: #3498db;
+  box-shadow: 0 0 10px rgba(52, 152, 219, 0.1);
+  outline: none;
+}
+
+.modal-botones {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.boton.eliminar {
+  background-color: #dc3545;
+}
+
+.precio-venta {
+  font-weight: bold;
+  color: #27ae60;
 }

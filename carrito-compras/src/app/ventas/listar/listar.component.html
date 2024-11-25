@@ -2,11 +2,40 @@
   <h2>Listado de Ventas</h2>
   <button (click)="crearNuevaVenta()" class="boton">Nueva Venta</button>
 
+  <div class="filtros">
+    <!-- Filtros de fechas -->
+    <div>
+      <label for="fechaInicio">Fecha Inicio:</label>
+      <input type="date" id="fechaInicio" [(ngModel)]="fechaInicio" (ngModelChange)="filtrarVentas()">
+    </div>
+  
+    <div>
+      <label for="fechaFin">Fecha Fin:</label>
+      <input type="date" id="fechaFin" [(ngModel)]="fechaFin" (ngModelChange)="filtrarVentas()">
+    </div>
+  
+    <!-- Filtros por cliente -->
+    <div>
+      <label for="clienteNombre">Nombre:</label>
+      <input type="text" id="clienteNombre" [(ngModel)]="clienteNombre" (ngModelChange)="filtrarVentas()" placeholder="Nombre del cliente">
+    </div>
+  
+    <div>
+      <label for="clienteApellido">Apellido:</label>
+      <input type="text" id="clienteApellido" [(ngModel)]="clienteApellido" (ngModelChange)="filtrarVentas()" placeholder="Apellido del cliente">
+    </div>
+
+    <div>
+        <label for="clienteCedula">Cédula:</label>
+        <input type="text" id="clienteCedula" [(ngModel)]="clienteCedula" (ngModelChange)="filtrarVentas()" placeholder="Cédula del cliente">
+      </div>
+  </div>  
+
   <div *ngIf="ventas.length === 0" class="no-data">
     No hay ventas registradas
   </div>
 
-  <table *ngIf="ventas.length > 0">
+  <table *ngIf="ventasFiltradas.length > 0">
     <thead>
       <tr>
         <th>ID Venta</th>
@@ -17,16 +46,40 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let venta of ventas">
+      <tr *ngFor="let venta of ventasFiltradas">
         <td>{{ venta.idVenta }}</td>
         <td>{{ venta.fecha | date:'dd/MM/yyyy HH:mm' }}</td>
-        <td>{{ venta.idCliente }}</td>
+        <td>{{ obtenerNombreCliente(venta.idCliente) }}</td>
         <td>${{ venta.total.toFixed(2) }}</td>
         <td>
-          <button (click)="editarVenta(venta)" class="boton">Editar</button>
+            <button (click)="abrirModal(venta)" class="boton">Ver detalle</button>
           <button (click)="eliminarVenta(venta.idVenta)" class="boton eliminar">Eliminar</button>
         </td>
       </tr>
     </tbody>
   </table>
+
+  <!-- Modal -->
+    <div class="modal" *ngIf="mostrarModal">
+    <div class="modal-contenido">
+        <span class="cerrar" (click)="cerrarModal()">&times;</span>
+        <h3>Detalles de los Productos</h3>
+        <table>
+        <thead>
+            <tr>
+            <th>Producto</th>
+            <th>Precio</th>
+            <th>Cantidad</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let detalle of detallesVenta">
+            <td>{{ detalle.nombreProducto }}</td>
+            <td>${{ detalle.precioVenta }}</td>
+            <td>{{ detalle.cantidad }}</td>
+            </tr>
+        </tbody>
+        </table>
+    </div>
+    </div>
 </div>
