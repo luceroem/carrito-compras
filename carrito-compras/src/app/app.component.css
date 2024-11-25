@@ -3,6 +3,8 @@
   display: block;
   background-color: #f5f6fa;
   min-height: 100vh;
+  margin: 0;
+  padding: 0;
   font-family: 'Times New Roman', serif;
 }
 
@@ -72,7 +74,7 @@
 
 /* Estilo para el contenido debajo de la barra de navegación */
 .content-container {
-  padding: 20px;
+  padding: 0px;
   max-width: 1200px;
   margin: 0 auto;
   margin-top: 0; /* Evita que el contenido quede tapado por la barra sticky */

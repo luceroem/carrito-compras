@@ -4,7 +4,8 @@ import { ListarComponent } from './listar/listar.component';
 import { CrearEditarComponent } from './crear-editar/crear-editar.component';
 
 const routes: Routes = [
-  { path: '', component: ListarComponent },
+  { path: '', redirectTo: 'listar', pathMatch: 'full' }, // Redirige /categorias a /categorias/listar
+  { path: 'listar', component: ListarComponent },
   { path: 'crear', component: CrearEditarComponent },
   { path: 'editar/:id', component: CrearEditarComponent },
 ];

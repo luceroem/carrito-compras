@@ -15,7 +15,6 @@ export class AppComponent {
   menuItems = [
     { path: '/ventas', label: 'Ventas' },
     { path: '/categorias', label: 'Categorías' },
-    { path: '/productos', label: 'Productos' },
-    { path: '/clientes', label: 'Clientes' }
+    { path: '/productos', label: 'Productos' }
   ];
 }

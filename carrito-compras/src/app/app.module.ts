@@ -1,11 +1,8 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { provideHttpClient } from '@angular/common/http';  // Importa el nuevo método
 import { AppComponent } from './app.component';
-import { HttpClientModule } from '@angular/common/http';
-import { ListarVentasComponent } from './ventas/listar/listar.component';
-import { VentasModule } from './ventas/ventas.module';
+import { AppRoutingModule } from './app-routing.module'; // Asegúrate de importarlo
 
 @NgModule({
   declarations: [
@@ -13,15 +10,9 @@ import { VentasModule } from './ventas/ventas.module';
   ],
   imports: [
     BrowserModule,
-    FormsModule,
-    HttpClientModule,
-    RouterModule.forRoot([
-      { path: '', redirectTo: '/ventas', pathMatch: 'full' },
-      { path: 'ventas', component: ListarVentasComponent }
-    ]),
-    VentasModule
+    AppRoutingModule // Se debe incluir el AppRoutingModule aquí
   ],
-  providers: [],
+  providers: [provideHttpClient()],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}
