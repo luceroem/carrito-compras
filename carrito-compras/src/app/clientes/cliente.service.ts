@@ -7,7 +7,14 @@ import { Cliente } from './models/cliente.model';
   providedIn: 'root'
 })
 export class ClienteService {
-  private clientes: Cliente[] = [];
+  private clientes: Cliente[] = [
+    { idCliente: 1, nombre: 'Juan', apellido: 'Pérez', cedula: '12345678' },
+    { idCliente: 2, nombre: 'Ana', apellido: 'González', cedula: '87654321' },
+  ];
+
+  getClientes(): Observable<Cliente[]> {
+    return of(this.clientes); // Devuelve todos los clientes
+  }
 
   buscarPorCedula(cedula: string): Observable<Cliente | null> {
     const cliente = this.clientes.find(c => c.cedula === cedula);
